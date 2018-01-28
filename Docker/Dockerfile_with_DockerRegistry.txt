@@ -1,0 +1,55 @@
+Step 1	#Create a folder "Mydocker"	
+	mkdir mydocker
+	#Change to the folder	
+	cd mydocker
+
+Step 2  #Copy sample war file into the context folder
+	wget https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war
+
+Step 3	#Create "tomcat-users.xml" file and copy the below content into it	
+	nano tomcat-users.xml
+	# Below is the content of tomcat-users.xml	
+	<?xml version="1.0" encoding="utf-8"?>
+	<tomcat-users>
+	  <role rolename="manager-gui"/>
+	  <role rolename="manager-status"/>
+	  <role rolename="manager-script"/>
+	  <role rolename="manager-jmx"/>
+	<role rolename="admin-gui"/>
+	<role rolename="admin-script"/>
+	  <user username="admin" password="admin" roles="manager-gui, manager-script, admin-gui, admin-script"/>
+	</tomcat-users>
+Step 4  #Create dockerfile with nano or vim editor in the same folder	
+	nano dockerfile
+	#Copy the below set of instructions into the dockrefile	
+	FROM tomcat:latest
+	RUN apt-get update && apt-get install -y \
+	        curl \
+	        nano \
+	        procps
+	
+	#Copy tomcat-users.xml  to the new image
+	COPY ./tomcat-users.xml /usr/local/tomcat/conf/
+	COPY ./sample.war /usr/local/tomcat/webapps/
+	
+	# Expose the default tomcat port
+	EXPOSE 8080
+	
+Step 5	#Build the image 	
+	docker build -t qshore/tomcat:1.0 .
+	#Make sure that you are in mydocker folder and below files are present
+	#dockerfile, tomcat-users.xml, Sample.war
+	#Create container 	
+	docker run -it --name="tc1" -p 8082:8080 qshore/tomcat:1.0 /bin/bash
+Step 6	#Create docker registry…	
+	docker pull registry:latest
+Step 7	#Run docker registry	
+	docker run -d --rm  --name="My Dock Store" -p 5000:5000 registry:latest
+Step 8	#Create a tag to the image created by you in step 4	
+	docker tag qshore/tomcat:1.0 localhost:5000/tomcat
+Step 9 	#Push your image to your docker registry	
+	docker push localhost:5000/tomcat
+Step 10	#Remove your local image. Make sure it's container is stopped and killed.	
+	docker rmi qshore/tomcat:1.0
+Step 11	#Pull your image from your docker registry	
+	docker pull localhost:5000/tomcat

@@ -1,0 +1,31 @@
+********************Configuring Tomcat8************************
+#Copy the below XML configuration to the /var/lib/tomcat8/conf/tomcat-users.xml file and save the file
+
+<role rolename = "manager-gui"/> 
+<role rolename="admin-gui"/> 
+<role rolename="manager-script"/> 
+<user username="raghu" password="raghu" roles="manager-gui, admin-gui"/>
+<user username="deployer" password="deployer" roles="manager-script, manager-gui"/>
+
+# Restart Tomcat service 
+sudo systemctl restart tomcat8
+
+
+*******************Create a Jenkins Job and deploy Hello World Web App to Tomcat************
+Install "Deploy to container" plugin from Manage Jenkins -> Manage Plugins
+	• Create a new freestyle project by the name "FirstWebApp"
+	• Configure -> Source Code Management -> Git
+	• Repository URL: https://github.com/raghupss/Hellow_world.git
+	• Configure -> Build -> Invoke top-level Maven targets
+	• Goals -> package
+	• Post build actions -> Add post -build action -> Deploy WAR/EAR to a container
+	• WAR/EAR files:  Provide the WAR name (e.g. target/hello-world-war-1.0.0.war)
+	• Context Path: hello
+	• Containers: Tomcat 8.x 
+		? Manager user name: Give the one that we have configured in the /var/lib/tomcat8/conf/tomcat-users.xml (e.g. deployer)
+		? Password: give the password (e.g. deployer)
+		? Tomcat URL:  e.g. http://13.126.110.18:8081 (replace it with your server's public IP)
+		? Apply and Save the build settings
+	• Build the project with "Build Now" option
+	• Go to "Console Output" and ensure build and deploy steps succeeded.
+RUN THE PROJECT:  go to browser and give the tomcat URL along with the Tomcat's deployment folder name and the file name (e.g http://13.126.110.18:8081/hello)

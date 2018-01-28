@@ -1,0 +1,74 @@
+***********Ansible Installation*************
+# run the below commands in Ansible Conrol instance
+apt-get install software-properties-common
+apt-add-repository ppa:ansible/ansible
+apt-get update
+apt-get install ansible
+
+
+*******remote host (node) creation********
+# Enable password authentication
+sudo nano /etc/ssh/sshd_config
+PasswordAuthentication yes
+sudo systemctl restart sshd
+#Reset ubuntu password
+su
+passwd ubuntu
+apt install python -y
+su ubuntu
+
+
+
+
+
+*******Create and copy SSH Key from Ansible Control instance **************
+#From Ansible-conrol
+#Reset ubuntu password
+su
+passwd ubuntu
+su ubuntu
+ssh-copy-id ubuntu@<node-machine IP>
+
+
+
+#Ansible Commands
+ansible all -m ping
+ansible ansible all -m ping
+ansible all -a "/bin/echo hello"
+ansible all -a date
+ansible all --list-hosts
+
+ansible-playbook playbooks/PLAYBOOK_NAME.yml --syntax-check
+ansible-playbook <playbook name>
+ansible-galaxy install adarnimrod.apache
+
+ansible-galaxy remove username.role_name
+ansible-galaxy remove adarnimrod.apache
+ansible-galaxy list
+
+Playbooks to be placed
+cd /etc/ansible
+
+
+YAML online editor:  http://www.yamllint.com/
+Ansible Tower Trial: https://www.ansible.com/tower-trial
+
+
+//to copy files
+ansible 35.154.96.233 -m copy -a "src=/etc/ansible/abc dest=/tmp/"
+ansible webservers -m file -a "dest=/srv/foo/a.txt mode=600"
+ansible webservers -m file -a "dest=/srv/foo/b.txt mode=600 owner=raghupoolla group=raghupoolla"
+ansible webservers -m git -a "repo=https://github.com/HelloDocker.git dest=/tmp/myapp version=HEAD"
+35.201.204.21
+
+ansible all -m git -a "repo=https://github.com/raghupss/Helloworld-web.git dest=/home/ubuntu/data/myapp version=HEAD"
+
+
+Ansible-galaxy init my-role
+
+
+
+ansible-galaxy install git+https://github.com/raghupss/ansible-role-apache.git,
+ansible-galaxy install username.role_name
+ansible-galaxy install adarnimrod.apache
+

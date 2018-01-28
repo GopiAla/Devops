@@ -1,0 +1,19 @@
+*******************Generate SSH key in your local (Development) system ***************
+ssh-keygen -t rsa -b 4096 -C "pss.raghu@gmail.com "
+# When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location
+#At the prompt, type a secure passphrase or press ENTER
+#start the ssh-agent in the background
+eval "$(ssh-agent -s)"
+#Add your SSH private key to the ssh-agent. 
+ssh-add ~/.ssh/id_rsa
+#Copy SSH key to your clipboard
+clip < ~/.ssh/id_rsa.pub
+
+**********Below steps have to be performed in your Github account. Make sure that you have created a github ( https://github.com) account before running the below steps
+Login to your github account
+In the user settings sidebar (Pull down the dropdown on the top right of the screen and select "Settings" option.)
+Click SSH and GPG keys.
+Click New SSH key or Add SSH key.
+In the "Title" field, add a descriptive label for the new key. E.g. raghu_windows_client 
+Paste your key into the "Key" field.
+Click Add SSH key
